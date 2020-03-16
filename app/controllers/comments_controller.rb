@@ -2,11 +2,11 @@
 class CommentsController < ApplicationController
   before_action :set_comment, only: %i[show edit destroy update]
   before_action :set_book
-
+  
   def index 
     respond_to do |format|
 			format.json do
-        comments = @book.comments.all
+        comments = @book.comments.all.order("created_at DESC")
         render(json: comments, status: :ok)
       end			
 		end
@@ -19,15 +19,17 @@ class CommentsController < ApplicationController
   def edit; end
 
   def create
-    @comment = @book.comments.new(comment_params)   
-    @comment.user = current_user   
+    auth_token = request.headers["X-User-Token"]    
+    @comment = @book.comments.new(comment_params)
+    byebug
+    if(@comment.user.authentication_token == auth_token)   
     @comment.save
-    # unless @comment.parent_id.nil?
-    #   @reply = @comment
-    # end
-    # respond_to do |format|
-    #   format.js { [@comment, @reply] }      
-    # end
+    render json: @comment.as_json(), status: :ok 
+    else
+      render json: { error: true, message: "Cant verify csrf token."}, 
+      status: 401
+      head(:unauthorized)
+    end 
   end
 
   def update
