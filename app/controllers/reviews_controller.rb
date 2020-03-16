@@ -3,11 +3,21 @@ class ReviewsController < ApplicationController
   include Pagy::Backend
   before_action :set_review, only: %i[show edit destroy update]
   before_action :set_book
-  before_action :authenticate_user!
+  before_action :authenticate_user!, except: [:index]
 
   def index
     @pagy, @reviews = pagy(@book.reviews, items: 5)
+
+
+
+    respond_to do |format|
+			format.json do
+        reviews = @book.reviews.all
+        render(json: reviews, status: :ok)
+      end			
+		end
   end
+
 
   def new
     @review = Review.new

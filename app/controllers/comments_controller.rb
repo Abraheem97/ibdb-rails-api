@@ -3,6 +3,15 @@ class CommentsController < ApplicationController
   before_action :set_comment, only: %i[show edit destroy update]
   before_action :set_book
 
+  def index 
+    respond_to do |format|
+			format.json do
+        comments = @book.comments.all
+        render(json: comments, status: :ok)
+      end			
+		end
+  end
+
   def new
     @comment = Comment.new
   end
@@ -10,15 +19,15 @@ class CommentsController < ApplicationController
   def edit; end
 
   def create
-    @comment = @book.comments.new(comment_params)
-    @comment.user = current_user
+    @comment = @book.comments.new(comment_params)   
+    @comment.user = current_user   
     @comment.save
-    unless @comment.parent_id.nil?
-      @reply = @comment
-    end
-    respond_to do |format|
-      format.js { [@comment, @reply] }      
-    end
+    # unless @comment.parent_id.nil?
+    #   @reply = @comment
+    # end
+    # respond_to do |format|
+    #   format.js { [@comment, @reply] }      
+    # end
   end
 
   def update
@@ -43,7 +52,7 @@ class CommentsController < ApplicationController
   private
 
   def comment_params
-    params.require(:comment).permit(:body, :parent_id, :image)
+    params.require(:comment).permit(:body, :parent_id, :image, :user_id)
   end
 
   def set_book

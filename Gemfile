@@ -1,3 +1,4 @@
+
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
@@ -6,7 +7,6 @@ ruby '2.6.5'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 5.2.4', '>= 5.2.4.1'
 # Use sqlite3 as the database for Active Record
-gem 'sqlite3'
 # Use Puma as the app server
 gem 'puma', '~> 3.11'
 # Use SCSS for stylesheets
@@ -15,6 +15,8 @@ gem 'sass-rails', '~> 5.0'
 gem 'uglifier', '>= 1.3.0'
 # See https://github.com/rails/execjs#readme for more supported runtimes
 # gem 'mini_racer', platforms: :ruby
+# Use sqlite3 as the database for Active Record
+gem 'sqlite3'
 
 # Use CoffeeScript for .coffee assets and views
 gem 'coffee-rails', '~> 4.2'
@@ -40,6 +42,7 @@ group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
   gem 'rspec-rails'
+  gem 'letter_opener'
 end
 
 group :development do
@@ -71,9 +74,13 @@ gem 'simple_form'
 gem 'jquery-rails'
 gem 'bootstrap-sass'
 gem 'devise'
+gem 'simple_token_authentication'
 gem 'ancestry'
 gem 'toastr-rails'
 gem 'cancancan'
 gem 'rails_admin'
 gem 'brakeman'
 gem 'pagy'
+
+
+gem "rack-cors", "~> 1.1"
