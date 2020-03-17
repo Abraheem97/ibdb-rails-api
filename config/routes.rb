@@ -17,7 +17,7 @@ end
   
 namespace :v1 do 
   resources :sessions, only: [:create,:destroy]
-  get 'users', controller: 'users', action: 'index'
+  get '/:id/user', controller: 'users', action: 'index'
 end
   mount ActionCable.server => '/cable'
 end
