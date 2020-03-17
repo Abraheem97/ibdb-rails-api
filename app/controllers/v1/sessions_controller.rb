@@ -5,27 +5,29 @@ class V1::SessionsController < ApplicationController
     user = User.where(email: params[:email]).first
     
 
-    if user&.confirmed_at == nil 
-      render json: { error: true, message: 'Please confirm your registered email to access your account.'}, 
-          status: 403
-    else 
-    if user&.valid_password?(params[:password])    
-      render json: user.as_json(), status: :ok 
-     
+   
+
+    if user&.confirmed_at
+      if user&.valid_password?(params[:password]) 
+        render json: user.as_json(), status: :ok
+      else
+        render json: {error: true, message: 'Account not found'},status: 401
+      end
     else
-       render json: { error: true, message: 'Please confirm your registered email to access your account.'}, 
-          status: 401
-         
-  
+      if user
+        render json: { error: true, message: 'Please confirm your registered email to access your account.'}, 
+        status: 403
+      else
+        render json: {error: true, message: 'Account not found'},status: 402
+      end
     end
-    
-    end
+
+
   end
    
 
 
-  def destroy 
-    puts "==============" + params[:id]
+  def destroy    
       user = User.where(id: params[:id]).first
       user&.authentication_token = nil
       if user&.save

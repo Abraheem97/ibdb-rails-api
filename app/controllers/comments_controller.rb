@@ -21,7 +21,7 @@ class CommentsController < ApplicationController
   def create
     auth_token = request.headers["X-User-Token"]    
     @comment = @book.comments.new(comment_params)
-    byebug
+ 
     if(@comment.user.authentication_token == auth_token)   
     @comment.save
     render json: @comment.as_json(), status: :ok 
