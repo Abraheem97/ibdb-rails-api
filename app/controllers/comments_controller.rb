@@ -41,10 +41,19 @@ class CommentsController < ApplicationController
   end
 
   def destroy
+    auth_token = request.headers["X-User-Token"] 
+    if(@comment.user.authentication_token == auth_token)   
     @comment.destroy
-    respond_to do |format|
-      format.js { @comment }
-    end
+    render json: @comment.as_json(), status: :ok 
+  else
+    render json: { error: true, message: "Cant verify csrf token."}, 
+    status: 401
+    head(:unauthorized)
+  end
+    # @comment.destroy
+    # respond_to do |format|
+    #   format.js { @comment }
+    # end
   end
 
   def set_comment
